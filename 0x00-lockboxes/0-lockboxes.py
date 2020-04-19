@@ -11,10 +11,11 @@ def canUnlockAll(boxes):
     visited = []
     for i in range(len(boxes)):
         for j in range(len(boxes[i])):
-            if boxes[i][j] > i:
+            if i < boxes[i][j] < len(boxes):
                 visited.append(boxes[i][j])
-
-    if max(visited) == len(boxes) - 1:
+        if len(boxes[i]) == 0 and i == len(boxes) - 1:
+            visited.append(0)
+    if len(visited) == len(boxes):
         return True
     else:
         return False

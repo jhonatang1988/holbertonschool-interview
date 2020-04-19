@@ -5,6 +5,9 @@ check if all lockboxes can be access
 
 
 def canUnlockAll(boxes):
+    """
+    main
+    """
     visited = []
     for i in range(len(boxes)):
         for j in range(len(boxes[i])):

@@ -22,15 +22,22 @@ def minOperations(n):
         return 0
     if n == 1:
         return 0
-    i = 0
-    minimum = 1
+    operations = 0
+    characters = 1
+    additive = 1
 
-    while minimum < n:
-        if n % minimum == 0:
-            i += 2
-            minimum *= 2
+    while characters < n:
+        if n % characters == 0:
+            operations += 2
+            additive = characters
+            characters += additive
+            # print('DIVISIBLE! operations: {}, characters: {}'
+            #       .format(operations, characters))
+
         else:
-            i += 1
-            minimum += minimum
+            characters += additive
+            operations += 1
+            # print('NON! operations: {}, characters: {}'
+            #       .format(operations, characters))
 
-    return i
+    return operations

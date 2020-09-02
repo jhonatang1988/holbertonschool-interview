@@ -1,62 +1,42 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 """
-reads from stdin and compute metrics
-the input format
-<IP Address> - [<date>] "GET /projects/260 HTTP/1.1" <status code> <file size>
+interview task
 """
-# import signal
+
+import shlex
 import sys
-from collections import OrderedDict
 
-consolidated_file_size = 0
+status_list = ["200", "301", "400", "401", "403", "404", "405", "500"]
+value_list = [0, 0, 0, 0, 0, 0, 0, 0]
+total_size = 0
+counter = 0
 
-output_format = {
-    '200': 0,
-    '301': 0,
-    '400': 0,
-    '401': 0,
-    '403': 0,
-    '404': 0,
-    '405': 0,
-    '500': 0
-}
+try:
+    for line in sys.stdin:
+        line_parts = shlex.split(line)
+        if len(line_parts) > 2:
+            status = line_parts[-2]
+            size = line_parts[-1]
 
-times = 0
-buff = ''
+            total_size += int(size)
+            for i in range(len(status_list)):
+                if status_list[i] == status:
+                    value_list[i] += 1
+            counter += 1
 
-# def keyboard_exit_message(signal, frame):
-#     print("File size: {}".format(consolidated_file_size))
-#     for keys, values in output_format.items():
-#         if values != 0:
-#             print("{}: {}".format(keys, values))
-#     exit(0)
+            if counter >= 10:
+                print("File size: {}".format(total_size))
+                for i in range(len(status_list)):
+                    if value_list[i] > 0:
+                        print("{}: {}".format(status_list[i], value_list[i]))
+                counter = 0
 
+except:
+    pass
 
-# signal.signal(signal.SIGINT, keyboard_exit_message)
-
-while True:
-    try:
-        buff += sys.stdin.read(1)
-        if buff.endswith('\n'):
-            separated_terms = buff[:-1].split(' ')
-            file_size = separated_terms[-1]
-            consolidated_file_size += int(file_size)
-            status_code = separated_terms[-2]
-            output_format[status_code] += 1
-            buff = ''
-            times += 1
-            if times % 10 == 0:
-                ordered_dict = sorted(output_format.items(),
-                                      key=lambda k: k[0])
-                print("File size: {}".format(consolidated_file_size))
-                for status_code in ordered_dict:
-                    if status_code[1] != 0:
-                        print("{}: {}".format(status_code[0], status_code[1]))
-
-    except KeyboardInterrupt:
-        ordered_dict = sorted(output_format.items(),
-                              key=lambda k: k[1])
-        print("File size: {}".format(consolidated_file_size))
-        for status_code in ordered_dict:
-            if status_code[1] != 0:
-                print("{}: {}".format(status_code[0], status_code[1]))
+finally:
+    print("File size: {}".format(total_size))
+    for i in range(len(status_list)):
+        if value_list[i] > 0:
+            print("{}: {}".format(status_list[i], value_list[i]))
+    counter = 0

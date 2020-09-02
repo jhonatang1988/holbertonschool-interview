@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 """
 reads from stdin and compute metrics
 the input format
@@ -24,11 +24,11 @@ times = 0
 buff = ''
 
 
-def keyboard_exit_message():
+def keyboard_exit_message(signal, frame):
     print("File size: {}".format(consolidated_file_size))
     for keys, values in output_format.items():
         if values != 0:
-            print("{}:{}".format(keys, values))
+            print("{}: {}".format(keys, values))
     exit(0)
 
 
@@ -48,4 +48,4 @@ while True:
             print("File size: {}".format(consolidated_file_size))
             for key, value in output_format.items():
                 if value != 0:
-                    print("{}:{}".format(key, value))
+                    print("{}: {}".format(key, value))

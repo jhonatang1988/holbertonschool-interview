@@ -10,8 +10,14 @@ def validUTF8(data):
     :param data: list of integers
     :return: True if data is a valid UTF-8 encoding, else return False
     """
+    if not data:
+        return True
+    eight_least = []
     try:
-        if bytes(data):
-            return True
+        for i in data:
+            eight_least.append(i & 0xFF)
+        bits = bytes(eight_least)
+        bits.decode('utf-8')
+        return True
     except ValueError:
         return False

@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 """
 The N queens puzzle is the challenge of placing N non-attacking queens on
 an N×N chessboard
@@ -145,4 +145,5 @@ if __name__ == '__main__':
                     winners.append(combination)
 
     for winner in winners:
-        print(winner)
+        sorted_winner = sorted(winner, key=lambda x: x[0])
+        print(sorted_winner)

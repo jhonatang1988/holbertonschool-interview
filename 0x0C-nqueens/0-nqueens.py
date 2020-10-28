@@ -3,12 +3,12 @@
 The N queens puzzle is the challenge of placing N non-attacking queens on
 an N×N chessboard
 """
-from typing import List, Generator
+import sys
 
 combination_list = []
 
 
-def position_Generator(n: int = 4) -> Generator[List[int], None, None]:
+def position_Generator(n: int = 4):
     """
     generator to sent back a position [0, 0]
     :param n: number of queens
@@ -17,7 +17,7 @@ def position_Generator(n: int = 4) -> Generator[List[int], None, None]:
     return ([i, j] for i in range(0, n) for j in range(0, n))
 
 
-def chess_positions(n: int = 4) -> [List[int]]:
+def chess_positions(n: int = 4):
     """
     generator to sent back a position [0, 0]
     :param n: number of queens
@@ -36,7 +36,7 @@ def chess_permutations(lists, combination):
         chess_permutations(rest, combination + letter)
 
 
-def horizontal_attack(combs: List[List[int]], h_queens: int) -> bool:
+def horizontal_attack(combs, h_queens: int) -> bool:
     """
     attack the position horizontally and sends back a list of death
     :param combs:
@@ -63,7 +63,7 @@ def horizontal_attack(combs: List[List[int]], h_queens: int) -> bool:
     return True
 
 
-def vertical_attack(combs: List[List[int]], v_queens: int) -> bool:
+def vertical_attack(combs, v_queens: int) -> bool:
     """
     attack the position vertically and sends back a list of death
     :param combs:
@@ -89,7 +89,7 @@ def vertical_attack(combs: List[List[int]], v_queens: int) -> bool:
     return True
 
 
-def diagonal_attack(combs: List[List[int]], d_queens: int) -> bool:
+def diagonal_attack(combs, d_queens: int) -> bool:
     """
     attack the position diagonal and sends back a list of death
     :param combs:
@@ -118,14 +118,29 @@ def diagonal_attack(combs: List[List[int]], d_queens: int) -> bool:
 
 
 if __name__ == '__main__':
-    chess_permutations(chess_positions(6), [])
+    try:
+        n_queens = int(sys.argv[1])
+        if not isinstance(n_queens, int):
+            print('N must be a number')
+            exit(1)
+        if n_queens < 4:
+            print('N must be at least 4')
+            exit(1)
+    except IndexError:
+        print('Usage: nqueens N')
+        exit(1)
+    except ValueError:
+        print('N must be a number')
+        exit(1)
+
+    chess_permutations(chess_positions(n_queens), [])
     winners = []
     for combination in combination_list:
-        is_winner_horizontal = horizontal_attack(combination, 6)
+        is_winner_horizontal = horizontal_attack(combination, n_queens)
         if is_winner_horizontal:
-            is_winner_vertical = vertical_attack(combination, 6)
+            is_winner_vertical = vertical_attack(combination, n_queens)
             if is_winner_vertical:
-                is_winner_diagonal = diagonal_attack(combination, 6)
+                is_winner_diagonal = diagonal_attack(combination, n_queens)
                 if is_winner_diagonal:
                     winners.append(combination)
 
